@@ -1,10 +1,9 @@
-import org.jira.IssueType;
 import org.jira.JiraService;
 import org.jira.JiraSpecification;
 import org.junit.Test;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.params.ParameterizedTest;
-import org.junit.jupiter.params.provider.EnumSource;
+import org.junit.jupiter.params.provider.ValueSource;
 
 import static groovy.json.JsonOutput.toJson;
 import static org.apache.http.HttpStatus.SC_CREATED;
@@ -28,9 +27,9 @@ public class CreateIssueTest {
     }
 
     @ParameterizedTest
-    @EnumSource(IssueType.class)
-    public void successfulCreateIssueByTypeTest(IssueType issueType) {
-        var body = JiraSpecification.buildCreateBody(issueType.getName());
+    @ValueSource(strings = {"Taskq", "bug"})
+    public void successfulCreateIssueByTypeTest(String issueType) {
+        var body = JiraSpecification.buildCreateBody(issueType);
 
         System.out.println(toJson(body));
         var response = JiraService.createIssue(toJson(body));
